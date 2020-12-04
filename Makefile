@@ -103,7 +103,7 @@ deploy_local_to_aws_staging:
 	kubectl config current-context && \
 	kubectl cluster-info && \
 	kubectl get services && \
-	helm upgrade --install --set namespace=fhir-staging --set fhir.node_memory=8096 --set fhir.replicas=3 --set fhir.mongo_db_name=fhir_staging --set fhir.ingress_name=fhir-staging.dev.icanbwell.com --set include_mongo=false --set use_ingress=true --set aws=true --set mongoPassword=$$mongoPassword fhir-staging ./releases/node-fhir-server-mongo/node-fhir-server-mongo-1.0.tgz && \
+	helm upgrade --install --set namespace=fhir-staging --set fhir.node_memory=8096 --set fhir.replicas=3 --set fhir.mongo_db_name=fhir_staging --set fhir.ingress_name=fhir-staging.dev.icanbwell.com --set include_mongo=false --set use_ingress=true --set aws=true --set mongoPassword=$$mongoPassword --set include_mongoclient=true --set mongoclient.ingress_name=mongoclient-staging.dev.icanbwell.com fhir-staging ./releases/node-fhir-server-mongo/node-fhir-server-mongo-1.0.tgz && \
 	helm ls && \
 	kubectl get services && \
 	kubectl get all --namespace=fhir-staging && \
@@ -235,6 +235,10 @@ diagnose:
 .PHONY: busybox
 busybox:
 	kubectl exec --stdin --tty pod/busybox --namespace=fhir-dev -- /bin/bash
+
+.PHONY: mongoclient
+mongoclient:
+	kubectl exec --stdin --tty pod/mongoclient --namespace=fhir-staging -- /bin/bash
 
 .PHONY: test_mongo_in_container
 test_mongo_in_container:

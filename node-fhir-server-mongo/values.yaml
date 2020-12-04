@@ -1,10 +1,11 @@
 images:
   node_fhir_server_mongo_image: imranq2/node-fhir-server-mongo:1.2.47
-  mongoclient_image: mongoclient/mongoclient:4.0.0
+  mongoclient_image: imranq2/mongoclient-aws:0.1.1
 
 
 # whether to include mondgo pods and services
 include_mongo: true
+include_mongoclient: true
 
 use_ingress: false
 
@@ -20,3 +21,6 @@ fhir:
   ingress_name: "fhir.dev.icanbwell.com"
   node_memory: 8096
 
+mongoclient:
+  replicas: 1
+  ingress_name: "mongoclient.dev.icanbwell.com"

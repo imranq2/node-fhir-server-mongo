@@ -1,0 +1,22 @@
+{{ if .Values.include_mongoclient }}
+{{ if .Values.aws }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongoclient
+# namespace should match other services in this file  
+  namespace: {{ .Values.namespace }}  
+spec:
+  clusterIP: None
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    io.kompose.service: mongoclient
+  type: ClusterIP
+status:
+  loadBalancer: {}
+{{ end }}
+{{ end }}

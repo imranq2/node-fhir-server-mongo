@@ -1,0 +1,23 @@
+{{ if .Values.include_mongoclient }}
+{{ if .Values.use_ingress }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: mongoclient-ingress
+  namespace: {{ .Values.namespace }}  
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.mongoclient.ingress_name }} 
+spec:
+  rules:
+  - host: {{ .Values.fhir.ingress_name }}
+    http:
+      paths:
+      - backend:
+          serviceName: mongoclient
+          servicePort: 80
+        path: /
+        pathType: ImplementationSpecific
+{{ end }}
+{{ end }}
